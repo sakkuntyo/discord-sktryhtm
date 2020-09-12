@@ -78,7 +78,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func zenkokuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
-  //関東
+  //全国
   s.ChannelMessageSend(m.ChannelID,"全国の天気予報")
   sendMsgRune,err := exec.Command("bash","/root/otenkimaru/zenkoku-tenki.sh").Output()
   if err != nil {
