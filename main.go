@@ -51,23 +51,25 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 
   if m.Content == "天気 関東" {
     //関東
+    s.ChannelMessageSend(m.ChannelID,"関東の天気予報")
     sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kanto-tenki.sh").Output()
     if err != nil {
       fmt.Println("error:exec failed")
     }
     sendMsg := string(sendMsgRune)
     fmt.Println(sendMsg)
-    s.ChannelMessageSend(m.ChannelID,sendMsg)
+    s.ChannelMessageSend(m.ChannelID,"```\n" + sendMsg + "\n```")
   }
 
   if m.Content == "天気 関西" {
     //関西
+    s.ChannelMessageSend(m.ChannelID,"関西の天気予報")
     sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kansai-tenki.sh").Output()
     if err != nil {
       fmt.Println("error:exec failed")
     }
     sendMsg := string(sendMsgRune)
     fmt.Println(sendMsg)
-    s.ChannelMessageSend(m.ChannelID,sendMsg)
+    s.ChannelMessageSend(m.ChannelID,"```\n" + sendMsg + "\n```")
   }
 }
