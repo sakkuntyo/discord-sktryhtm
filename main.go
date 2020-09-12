@@ -49,27 +49,40 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
     s.ChannelMessageSend(m.ChannelID, "Hi!" + nickname)
   }
 
+  if m.Content == "天気" {
+    kantoTenkiNotify(s,m)
+    kansaiTenkiNotify(s,m)
+  }
+
   if m.Content == "天気 関東" {
-    //関東
-    s.ChannelMessageSend(m.ChannelID,"関東の天気予報")
-    sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kanto-tenki.sh").Output()
-    if err != nil {
-      fmt.Println("error:exec failed")
-    }
-    sendMsg := string(sendMsgRune)
-    fmt.Println(sendMsg)
-    s.ChannelMessageSend(m.ChannelID,"```\n" + sendMsg + "\n```")
+    kantoTenkiNotify(s,m)
   }
 
   if m.Content == "天気 関西" {
-    //関西
-    s.ChannelMessageSend(m.ChannelID,"関西の天気予報")
-    sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kansai-tenki.sh").Output()
-    if err != nil {
-      fmt.Println("error:exec failed")
-    }
-    sendMsg := string(sendMsgRune)
-    fmt.Println(sendMsg)
-    s.ChannelMessageSend(m.ChannelID,"```\n" + sendMsg + "\n```")
+    kansaiTenkiNotify(s,m)
   }
+}
+
+func kantoTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
+  //関東
+  s.ChannelMessageSend(m.ChannelID,"関東の天気予報")
+  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kanto-tenki.sh").Output()
+  if err != nil {
+    fmt.Println("error:exec failed")
+  }
+  sendMsg := string(sendMsgRune)
+  fmt.Println(sendMsg)
+  s.ChannelMessageSend(m.ChannelID,"```\n" + sendMsg + "\n```")
+}
+
+func kansaiTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
+  //関西
+  s.ChannelMessageSend(m.ChannelID,"関西の天気予報")
+  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kansai-tenki.sh").Output()
+  if err != nil {
+    fmt.Println("error:exec failed")
+  }
+  sendMsg := string(sendMsgRune)
+  fmt.Println(sendMsg)
+  s.ChannelMessageSend(m.ChannelID,"```\n" + sendMsg + "\n```")
 }
