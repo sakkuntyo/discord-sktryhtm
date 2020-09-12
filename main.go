@@ -82,7 +82,7 @@ func zenkokuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"全国の天気予報")
   sendMsgRune,err := exec.Command("bash","/root/otenkimaru/zenkoku-tenki.sh").Output()
   if err != nil {
-    fmt.Println("error:exec failed")
+    fmt.Println("error:", err)
   }
   sendMsg := string(sendMsgRune)
   fmt.Println(sendMsg)
@@ -94,7 +94,7 @@ func kantoTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"関東の天気予報")
   sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kanto-tenki.sh").Output()
   if err != nil {
-    fmt.Println("error:exec failed")
+    fmt.Println("error:", err)
   }
   sendMsg := string(sendMsgRune)
   fmt.Println(sendMsg)
@@ -106,7 +106,7 @@ func kansaiTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"関西の天気予報")
   sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kansai-tenki.sh").Output()
   if err != nil {
-    fmt.Println("error:exec failed")
+    fmt.Println("error:", err)
   }
   sendMsg := string(sendMsgRune)
   fmt.Println(sendMsg)
