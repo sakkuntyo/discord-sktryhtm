@@ -6,14 +6,29 @@ import (
   "syscall"
   "github.com/bwmarrin/discordgo"
   "os/exec"
+  "io/ioutil"
+  "encoding/json"
 )
 
-const(
-  TOKEN = ""
-)
+// 構造体定義
+type Config struct {
+    DiscordToken  string  `json:"discordToken"`
+}
 
 func main() {
-  dg, err := discordgo.New("Bot " + TOKEN)
+  c := new(Config)
+  jsonString, err := ioutil.ReadFile("settings.json")
+  if err != nil {
+    fmt.Println("error:",err)
+    return
+  }
+  err = json.Unmarshal(jsonString, &c)
+  if err != nil {
+    fmt.Println("error:",err)
+    return
+  }
+
+  dg, err := discordgo.New("Bot " + c.DiscordToken)
   if err != nil {
     fmt.Println("error:start\n", err)
     return
