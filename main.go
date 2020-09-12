@@ -9,7 +9,7 @@ import (
 )
 
 const(
-  TOKEN = "token"
+  TOKEN = ""
 )
 
 func main() {
@@ -49,8 +49,20 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
     s.ChannelMessageSend(m.ChannelID, "Hi!" + nickname)
   }
 
-  if m.Content == "天気" {
+  if m.Content == "天気 関東" {
+    //関東
     sendMsgRune,err := exec.Command("bash","/root/go-tenki/kanto-tenki.sh").Output()
+    if err != nil {
+      fmt.Println("error:exec failed")
+    }
+    sendMsg := string(sendMsgRune)
+    fmt.Println(sendMsg)
+    s.ChannelMessageSend(m.ChannelID,sendMsg)
+  }
+
+  if m.Content == "天気 関西" {
+    //関西
+    sendMsgRune,err := exec.Command("bash","/root/go-tenki/kansai-tenki.sh").Output()
     if err != nil {
       fmt.Println("error:exec failed")
     }
