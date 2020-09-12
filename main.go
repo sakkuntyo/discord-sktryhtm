@@ -50,8 +50,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
   }
 
   if m.Content == "天気" {
-    kantoTenkiNotify(s,m)
-    kansaiTenkiNotify(s,m)
+    zenkokuTenkiNotify(s,m)
   }
 
   if m.Content == "天気 関東" || m.Content == "天気　関東" {
@@ -61,6 +60,18 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
   if m.Content == "天気 関西" || m.Content == "天気　関西" {
     kansaiTenkiNotify(s,m)
   }
+}
+
+func zenkokuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
+  //関東
+  s.ChannelMessageSend(m.ChannelID,"全国の天気予報")
+  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/zenkoku-tenki.sh").Output()
+  if err != nil {
+    fmt.Println("error:exec failed")
+  }
+  sendMsg := string(sendMsgRune)
+  fmt.Println(sendMsg)
+  s.ChannelMessageSend(m.ChannelID,"```\n" + sendMsg + "\n```")
 }
 
 func kantoTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
