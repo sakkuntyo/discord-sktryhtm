@@ -5,6 +5,7 @@ import (
   "os/signal"
   "syscall"
   "github.com/bwmarrin/discordgo"
+  "os/exec"
 )
 
 const(
@@ -46,5 +47,15 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 
   if m.Content == "hi" {
     s.ChannelMessageSend(m.ChannelID, "Hi!" + nickname)
+  }
+
+  if m.Content == "天気" {
+    sendMsgRune,err := exec.Command("bash","/root/go-tenki/kanto-tenki.sh").Output()
+    if err != nil {
+      fmt.Println("error:exec failed")
+    }
+    sendMsg := string(sendMsgRune)
+    fmt.Println(sendMsg)
+    s.ChannelMessageSend(m.ChannelID,sendMsg)
   }
 }
