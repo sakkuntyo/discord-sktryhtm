@@ -51,7 +51,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 
   if m.Content == "天気 関東" {
     //関東
-    sendMsgRune,err := exec.Command("bash","/root/go-tenki/kanto-tenki.sh").Output()
+    sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kanto-tenki.sh").Output()
     if err != nil {
       fmt.Println("error:exec failed")
     }
@@ -62,7 +62,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 
   if m.Content == "天気 関西" {
     //関西
-    sendMsgRune,err := exec.Command("bash","/root/go-tenki/kansai-tenki.sh").Output()
+    sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kansai-tenki.sh").Output()
     if err != nil {
       fmt.Println("error:exec failed")
     }
