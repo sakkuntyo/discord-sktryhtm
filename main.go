@@ -68,7 +68,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
     zenkokuTenkiNotify(s,m)
   }
 
-  if m.Content == "天気 関東" || m.Content == "天気　関東" {
+  if m.Content == "天気 関東" || m.Content == "天気　関東" || m.Content == "天気 近畿" || m.Content == "天気　近畿" {
     kantoTenkiNotify(s,m)
   }
 
