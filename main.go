@@ -19,12 +19,12 @@ func main() {
   c := new(Config)
   jsonString, err := ioutil.ReadFile("settings.json")
   if err != nil {
-    fmt.Println("error:",err)
+    fmt.Println("error:\n", err)
     return
   }
   err = json.Unmarshal(jsonString, &c)
   if err != nil {
-    fmt.Println("error:",err)
+    fmt.Println("error:\n", err)
     return
   }
 
