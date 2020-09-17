@@ -60,10 +60,6 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
   }
   fmt.Println(m.Content + " by " + nickname)
 
-  if m.Content == "hi" {
-    s.ChannelMessageSend(m.ChannelID, "Hi!" + nickname)
-  }
-
   if m.Content == "天気" || m.Content == "天気 全国" || m.Content == "天気　全国" {
     zenkokuTenkiNotify(s,m)
   }
