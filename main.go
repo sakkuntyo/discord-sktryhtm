@@ -107,7 +107,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func zenkokuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"全国の天気予報")
-  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/zenkoku-tenki.sh").Output()
+  sendMsgRune,err := exec.Command("bash","./zenkoku-tenki.sh").Output()
   if err != nil {
     fmt.Println("error:", err)
   }
@@ -118,7 +118,7 @@ func zenkokuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func hokkaidoTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"北海道の天気予報")
-  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/hokkaido-tenki.sh").Output()
+  sendMsgRune,err := exec.Command("bash","./hokkaido-tenki.sh").Output()
   if err != nil {
     fmt.Println("error:", err)
   }
@@ -129,7 +129,7 @@ func hokkaidoTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func tohokuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"東北の天気予報")
-  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/tohoku-tenki.sh").Output()
+  sendMsgRune,err := exec.Command("bash","./tohoku-tenki.sh").Output()
   if err != nil {
     fmt.Println("error:", err)
   }
@@ -140,7 +140,7 @@ func tohokuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func kantoTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"関東の天気予報")
-  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kanto-tenki.sh").Output()
+  sendMsgRune,err := exec.Command("bash","./kanto-tenki.sh").Output()
   if err != nil {
     fmt.Println("error:", err)
   }
@@ -151,7 +151,7 @@ func kantoTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func hokurikuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"北陸の天気予報")
-  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/hokuriku-tenki.sh").Output()
+  sendMsgRune,err := exec.Command("bash","./hokuriku-tenki.sh").Output()
   if err != nil {
     fmt.Println("error:", err)
   }
@@ -162,7 +162,7 @@ func hokurikuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func tokaiTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"東海の天気予報")
-  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/tokai-tenki.sh").Output()
+  sendMsgRune,err := exec.Command("bash","./tokai-tenki.sh").Output()
   if err != nil {
     fmt.Println("error:", err)
   }
@@ -173,7 +173,7 @@ func tokaiTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func kansaiTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"関西の天気予報")
-  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kansai-tenki.sh").Output()
+  sendMsgRune,err := exec.Command("bash","./kansai-tenki.sh").Output()
   if err != nil {
     fmt.Println("error:", err)
   }
@@ -184,7 +184,7 @@ func kansaiTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func chugokuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"中国の天気予報")
-  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/chugoku-tenki.sh").Output()
+  sendMsgRune,err := exec.Command("bash","./chugoku-tenki.sh").Output()
   if err != nil {
     fmt.Println("error:", err)
   }
@@ -195,7 +195,7 @@ func chugokuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func shikokuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"四国の天気予報")
-  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/shikoku-tenki.sh").Output()
+  sendMsgRune,err := exec.Command("bash","./shikoku-tenki.sh").Output()
   if err != nil {
     fmt.Println("error:", err)
   }
@@ -206,7 +206,7 @@ func shikokuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func kyusyuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"九州の天気予報")
-  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/kyusyu-tenki.sh").Output()
+  sendMsgRune,err := exec.Command("bash","./kyusyu-tenki.sh").Output()
   if err != nil {
     fmt.Println("error:", err)
   }
@@ -217,7 +217,7 @@ func kyusyuTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func okinawaTenkiNotify (s *discordgo.Session, m *discordgo.MessageCreate) {
   s.ChannelMessageSend(m.ChannelID,"沖縄の天気予報")
-  sendMsgRune,err := exec.Command("bash","/root/otenkimaru/okinawa-tenki.sh").Output()
+  sendMsgRune,err := exec.Command("bash","./okinawa-tenki.sh").Output()
   if err != nil {
     fmt.Println("error:", err)
   }
