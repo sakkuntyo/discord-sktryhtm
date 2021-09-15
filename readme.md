@@ -7,3 +7,6 @@
 
 準備中
 
+https://golang.hotexamples.com/jp/examples/github.com.bwmarrin.discordgo/VoiceConnection/-/golang-voiceconnection-class-examples.html
+
+ここを参考に開発
