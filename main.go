@@ -77,7 +77,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	s.ChannelMessageSend(m.ChannelID, m.Content)
-	fmt.Println("送信したメッセージ:", m.Content)
+	fmt.Println("send message:", m.Content)
 }
 
 func findUserVoiceState(session *discordgo.Session, userid string) (*discordgo.VoiceState, error) {
