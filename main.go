@@ -35,6 +35,12 @@ func main() {
 		fmt.Println("error:\n", err)
 		return
 	}
+	//tmp初期化
+	_, err = exec.Command("sh", "-c", "rm -f ./tmp/*").Output()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	dg, err := discordgo.New("Bot " + c.DiscordToken)
 	if err != nil {
@@ -64,8 +70,23 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	// Find a user's current voice channel
+	vs, err := findUserVoiceState(s, m.Author.ID)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	// start play
 	if regexp.MustCompile(`^!sp `).Match([]byte(m.Content)) {
+
+		// join the voice channel the user is on
+		vc, err := s.ChannelVoiceJoin(m.GuildID, vs.ChannelID, false, true)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
 		musicInfo := strings.Replace(m.Content, "!sp ", "", 1)
 		s.ChannelMessageSend(m.ChannelID, "再生を試みるんゴ")
 
@@ -77,20 +98,6 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		fmt.Println(m.Content + " by " + nickname)
 		//fmt.Printf("(%%#v) %#v\n", m.ChannelID)
-
-		// Find a user's current voice channel
-		vs, err := findUserVoiceState(s, m.Author.ID)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		// join the voice channel the user is on
-		vc, err := s.ChannelVoiceJoin(m.GuildID, vs.ChannelID, false, true)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
 
 		// dl youtube audio
 		cmdstr := "youtube-dl 'ytsearch:"
@@ -112,7 +119,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 		opts := dca.StdEncodeOptions
 		opts.RawOutput = true
 		opts.Bitrate = 120
-		opts.Volume = 1
+		opts.Volume = 5
 
 		encodeSession, err := dca.EncodeFile(audioFilePath, opts)
 		if err != nil {
@@ -139,7 +146,11 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 				// Clean up incase something happened and ffmpeg is still running
 				encodeSession.Truncate()
-				s.ChannelMessageSend(m.ChannelID, "再生したから落ちるんゴ、と思ったけど抜け方わからないんゴ")
+				err = s.ChannelVoiceJoinManual(m.GuildID, "", false, true)
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
 				return
 			case <-ticker.C:
 				stats := encodeSession.Stats()
@@ -147,6 +158,15 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 				fmt.Printf("Playback: %10s, Transcode Stats: Time: %5s, Size: %5dkB, Bitrate: %6.2fkB, Speed: %5.1fx\r", playbackPosition, stats.Duration.String(), stats.Size, stats.Bitrate, stats.Speed)
 			}
+		}
+	}
+
+	// vc disconnect
+	if regexp.MustCompile(`^!sd`).Match([]byte(m.Content)) {
+		err := s.ChannelVoiceJoinManual(m.GuildID, "", false, true)
+		if err != nil {
+			fmt.Println(err)
+			return
 		}
 	}
 }
