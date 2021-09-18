@@ -85,7 +85,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 	opts.RawOutput = true
 	opts.Bitrate = 120
 
-	encodeSession, err := dca.EncodeFile("./test.mp3", opts)
+	encodeSession, err := dca.EncodeFile("./tmp/test.mp3", opts)
 	if err != nil {
 		log.Fatal("Failed creating an encoding session: ", err)
 	}
