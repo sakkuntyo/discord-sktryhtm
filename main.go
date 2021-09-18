@@ -59,7 +59,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	// It works only with the rythm channel of the dust box.
-	if m.ChannelID != "770631423447138304" {
+	if m.ChannelID != "888667445999587328" {
 		return
 	}
 
