@@ -15,4 +15,6 @@ https://github-wiki-see.page/m/bwmarrin/discordgo/wiki/FAQ
 - mp3 を再生してるコード書いてあった
 https://golang.hotexamples.com/jp/examples/github.com.bwmarrin.discordgo/Session/ChannelVoiceJoin/golang-session-channelvoicejoin-method-examples.html
 
+- mp3再生こっちの方がいいかも
+https://github.com/jonas747/dca/blob/master/example/main.go
 - 
