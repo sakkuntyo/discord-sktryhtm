@@ -94,8 +94,9 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		// dl youtube audio
 		cmdstr := "youtube-dl 'ytsearch:"
-		cmdstr += musicInfo // movie name
-		cmdstr += "' -x --audio-format mp3 -o './tmp/%(title)s.%(ext)s' | grep mp3 | sed -e \"s/.*: //g\""
+		cmdstr += musicInfo // moviename
+		cmdstr += "' -x --audio-format mp3 -o './tmp/%(title)s.%(ext)s' |  grep -e 'mp3' -e ': Downloading webpage' | sed -e \"s/\\[youtube\\] /https:\\/\\/www\\.youtube\\.com\\/watch\\?v=/g\" -e \"s/: Downloading webpage//g\" -e \"s/.*Destination: //g\""
+
 		out, err := exec.Command("sh", "-c", cmdstr).Output()
 		if err != nil {
 			println("exec.Commandに失敗")
@@ -103,8 +104,9 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 
-		audioFilePath := strings.TrimRight(string(out), "\n")
-		movieName := strings.Replace(strings.Replace(audioFilePath, "./tmp/", "", 1), ".mp3", "", 1)
+		splitOut := regexp.MustCompile(`\r\n|\n`).Split(string(out), -1)
+		movieUrl := splitOut[0]
+		audioFilePath := splitOut[1]
 
 		// play audio file
 		opts := dca.StdEncodeOptions
@@ -119,7 +121,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 
-		s.ChannelMessageSend(m.ChannelID, "play -> "+movieName)
+		s.ChannelMessageSend(m.ChannelID, "play -> "+movieUrl)
 
 		done := make(chan error)
 		stream := dca.NewStream(encodeSession, vc, done)
