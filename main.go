@@ -112,6 +112,9 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	s.ChannelMessageSend(m.ChannelID, strings.TrimRight(string(out),"\n"))
+
+
 	done := make(chan error)
 	stream := dca.NewStream(encodeSession, vc, done)
 
