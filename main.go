@@ -5,10 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/jonas747/dca"
 	"io/ioutil"
 	"os"
 	"os/signal"
 	"syscall"
+	"log"
+	"io"
+	"time"
 )
 
 // 構造体定義
@@ -70,10 +74,43 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	// join the voice channel the user is on
-	_, err = s.ChannelVoiceJoin(m.GuildID, vs.ChannelID, false, true)
+	vc, err := s.ChannelVoiceJoin(m.GuildID, vs.ChannelID, false, true)
 	if err != nil {
 		fmt.Println(err)
 		return
+	}
+
+	// play audio file
+	opts := dca.StdEncodeOptions
+	opts.RawOutput = true
+	opts.Bitrate = 120
+
+	encodeSession, err := dca.EncodeFile("./test.mp3", opts)
+	if err != nil {
+		log.Fatal("Failed creating an encoding session: ", err)
+	}
+
+	done := make(chan error)
+	stream := dca.NewStream(encodeSession, vc, done)
+
+	ticker := time.NewTicker(time.Second)
+
+	for {
+		select {
+		case err := <-done:
+			if err != nil && err != io.EOF {
+				log.Fatal("An error occured", err)
+			}
+
+			// Clean up incase something happened and ffmpeg is still running
+			encodeSession.Truncate()
+			return
+		case <-ticker.C:
+			stats := encodeSession.Stats()
+			playbackPosition := stream.PlaybackPosition()
+
+			fmt.Printf("Playback: %10s, Transcode Stats: Time: %5s, Size: %5dkB, Bitrate: %6.2fkB, Speed: %5.1fx\r", playbackPosition, stats.Duration.String(), stats.Size, stats.Bitrate, stats.Speed)
+		}
 	}
 
 	s.ChannelMessageSend(m.ChannelID, m.Content)
