@@ -3,6 +3,19 @@
 
 [招待リンク](https://discord.com/api/oauth2/authorize?client_id=887736016037900359&permissions=3221504&scope=bot)
 
+# 動作環境
+
+- ubuntu 20.04
+- golang 1.13.8
+- 事前インストール
+
+```
+sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+sudo chmod a+rx /usr/local/bin/youtube-dl
+sudo apt update
+sudo apt install ffmpeg -y
+```
+
 # 使い方
 
 準備中
