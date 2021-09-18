@@ -104,6 +104,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 	opts := dca.StdEncodeOptions
 	opts.RawOutput = true
 	opts.Bitrate = 120
+	opts.Volume = 50
 
 	encodeSession, err := dca.EncodeFile(audioFilePath, opts)
 	if err != nil {
