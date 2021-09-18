@@ -7,6 +7,12 @@
 
 準備中
 
-https://golang.hotexamples.com/jp/examples/github.com.bwmarrin.discordgo/VoiceConnection/-/golang-voiceconnection-class-examples.html
+# 開発中参考リンク
 
-ここを参考に開発
+- ユーザーの参加してるボイスチャンネルの探し方書いてあった
+https://github-wiki-see.page/m/bwmarrin/discordgo/wiki/FAQ
+
+- mp3 を再生してるコード書いてあった
+https://golang.hotexamples.com/jp/examples/github.com.bwmarrin.discordgo/Session/ChannelVoiceJoin/golang-session-channelvoicejoin-method-examples.html
+
+- 
