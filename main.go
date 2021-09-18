@@ -6,13 +6,15 @@ import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/jonas747/dca"
+	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/signal"
+	"os/exec"
 	"syscall"
-	"log"
-	"io"
 	"time"
+	"strings"
 )
 
 // 構造体定義
@@ -56,6 +58,12 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.Bot {
 		return
 	}
+	// It works only with the rythm channel of the dust box.
+	if m.ChannelID != "770631423447138304" {
+		return
+	}
+
+	s.ChannelMessageSend(m.ChannelID, "再生を試みるんゴ")
 
 	nickname := m.Author.Username
 	member, err := s.State.Member(m.GuildID, m.Author.ID)
@@ -64,7 +72,7 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 		nickname = member.Nick
 	}
 	fmt.Println(m.Content + " by " + nickname)
-	//fmt.Printf("(%%#v) %#v\n", m.Author)
+	//fmt.Printf("(%%#v) %#v\n", m.ChannelID)
 
 	// Find a user's current voice channel
 	vs, err := findUserVoiceState(s, m.Author.ID)
@@ -80,14 +88,28 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	// dl youtube audio
+	cmdstr := "youtube-dl 'ytsearch:"
+	cmdstr += m.Content // movie name
+	cmdstr += "' -x --audio-format mp3 -o './tmp/%(playlist_index)s - %(title)s.%(ext)s' | grep mp3 | sed -e \"s/.*: //g\""
+	out, err := exec.Command("sh", "-c", cmdstr).Output()
+	if err != nil {
+		println("exec.Commandに失敗")
+	        s.ChannelMessageSend(m.ChannelID, "曲のDLに失敗したんゴ")
+		return
+	}
+	audioFilePath := strings.TrimRight(string(out),"\n")
+
 	// play audio file
 	opts := dca.StdEncodeOptions
 	opts.RawOutput = true
 	opts.Bitrate = 120
 
-	encodeSession, err := dca.EncodeFile("./tmp/test.mp3", opts)
+	encodeSession, err := dca.EncodeFile(audioFilePath, opts)
 	if err != nil {
 		log.Fatal("Failed creating an encoding session: ", err)
+	        s.ChannelMessageSend(m.ChannelID, "エンコードに失敗したんゴ")
+		return
 	}
 
 	done := make(chan error)
@@ -100,10 +122,13 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 		case err := <-done:
 			if err != nil && err != io.EOF {
 				log.Fatal("An error occured", err)
+	                        s.ChannelMessageSend(m.ChannelID, "よくわからん処理に失敗したんゴ、すまんゴ")
+				return
 			}
 
 			// Clean up incase something happened and ffmpeg is still running
 			encodeSession.Truncate()
+			s.ChannelMessageSend(m.ChannelID, "再生したから落ちるんゴ、と思ったけど抜け方わからないんゴ")
 			return
 		case <-ticker.C:
 			stats := encodeSession.Stats()
@@ -112,9 +137,6 @@ func msgReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 			fmt.Printf("Playback: %10s, Transcode Stats: Time: %5s, Size: %5dkB, Bitrate: %6.2fkB, Speed: %5.1fx\r", playbackPosition, stats.Duration.String(), stats.Size, stats.Bitrate, stats.Speed)
 		}
 	}
-
-	s.ChannelMessageSend(m.ChannelID, m.Content)
-	fmt.Println("send message:", m.Content)
 }
 
 func findUserVoiceState(session *discordgo.Session, userid string) (*discordgo.VoiceState, error) {
